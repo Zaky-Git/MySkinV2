@@ -17,7 +17,7 @@ Pastikan Anda sudah menginstal software berikut sebelum memulai proyek:
 
 1. **Clone Repository**
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/Zaky-Git/MySkinV2.git
    cd MySkinV2
    ```
 
