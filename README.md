@@ -10,7 +10,7 @@ Pastikan Anda sudah menginstal software berikut sebelum memulai proyek:
 - **Node.js**: Versi 14 atau lebih tinggi.
 - **Composer**: Versi 2.5.8 atau lebih tinggi.
 - **PHP**:  Versi 8.2 atau lebih tinggi.
-- **Python **: Versi 3.6 atau lebih tinggi
+- **Python**: Versi 3.6 atau lebih tinggi
 - **Database**: MySQL.
 
 ### Installation Steps
