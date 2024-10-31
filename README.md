@@ -1,21 +1,72 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MySkin V2
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+MySkin adalah sistem deteksi kanker kulit melanoma menggunakan Convolutional Neural Networks (CNN) melalui platform web berbasis Laravel 11 dan ReactJS. Sistem ini bertujuan memberikan layanan deteksi melanoma kepada pengguna secara mudah dan cepat.
 
-## About MySkin
+## Project Requirements
 
-sebuah sistem deteksi kanker kulit melanoma menggunakan Convolutional Neural Networks (CNN) melalui platform web bernama MySkin menggunakan Laravel 11 dan Reactjs dengan tujuan untuk memberikan layanan kepada pengguna yang ingin melakukan deteksi melanoma.
+### Prerequisites
 
-## Clone Project
-di folder react :
-npm install (pertama kali clone/ketika tidak bisa npm run dev),
-npm run dev (untuk run).
+Pastikan Anda sudah menginstal software berikut sebelum memulai proyek:
+- **Node.js**: Versi 14 atau lebih tinggi.
+- **Composer**: Versi 2.5.8 atau lebih tinggi.
+- **PHP**:  Versi 8.2 atau lebih tinggi.
+- **Python **: Versi 3.6 atau lebih tinggi
+- **Database**: MySQL.
 
-di folder myskin:
-composer install, setting database, migrate.
-php artisan serve (untuk run)
+### Installation Steps
+
+1. **Clone Repository**
+   ```bash
+   git clone <repository_url>
+   cd MySkinV2
+   ```
+
+2. **Backend Setup (Laravel)**
+
+   a. **Install Composer Dependencies**
+   ```bash
+   composer install
+   ```
+
+   b. **Konfigurasi Environment**
+   - Salin file `.env.example` ke `.env`
+   - Setting database dan informasi lain di file `.env` sesuai kebutuhan
+
+   c. **Database Migration**
+   ```bash
+   php artisan migrate
+   ```
+
+   d. **Menjalankan Server Lokal**
+   ```bash
+   php artisan serve
+   ```
+
+3. **Frontend Setup (React)**
+   
+   a. **Masuk ke folder frontend**
+   ```bash
+   cd react
+   ```
+
+   b. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+   c. **Menjalankan Server Development**
+   ```bash
+   npm run dev
+   ```
+
+### Testing Requirements
+
+- **Frontend Testing (React)**: Menggunakan **Jest**
+- **Backend Testing (Laravel)**: Menggunakan **PHPUnit**
+
+### Continuous Integration (CI) Setup
+
+Agar perubahan terbaru diuji dan divalidasi secara otomatis, proyek ini menggunakan **GitHub Actions** sebagai CI. CI ini mengelola:
+- **Build dan testing otomatis** di branch `main`, `dev`, dan branch anggota tim.
+- **Run Laravel Tests** dengan `PHPUnit`.
+- **Run React Tests** dengan `Jest`.
