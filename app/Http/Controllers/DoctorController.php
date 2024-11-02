@@ -8,11 +8,45 @@ use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
-    public function getAllDoctor()
+    public function getAllDoctor(Request $request)
     {
         $doctor = Doctor::all()->sortBy('created');
         return response()->json($doctor);
     }
+
+    public function getPaginateDoctor(Request $request)
+    {
+        $query = Doctor::query();
+
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('firstName', 'like', '%' . $searchTerm . '%')
+                ->orWhere('lastName', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        if ($request->has('sortBy') && $request->sortBy) {
+            $sortOrder = $request->input('sortOrder', 'asc');
+            $query->orderBy($request->sortBy, $sortOrder);
+        } else {
+            $query->orderBy('created_at', 'asc'); 
+        }
+
+        $perPage = $request->input('perPage', 10);
+        $doctors = $query->paginate($perPage);
+
+        return response()->json([
+            'data' => $doctors->items(),
+            'meta' => [
+                'current_page' => $doctors->currentPage(),
+                'last_page' => $doctors->lastPage(),
+                'total' => $doctors->total(),
+                'per_page' => $doctors->perPage()
+            ]
+        ]);
+    }
+
     public function getDoctor($id)
     {
         $doctor = Doctor::find($id);
