@@ -38,7 +38,7 @@ const Verifikasi = () => {
     const navigate = useNavigate();
 
     const submitVerification = () => {
-        confirmAlert({
+    confirmAlert({
             title: "Simpan Verifikasi",
             message: "Yakin ingin verifikasi?",
             buttons: [

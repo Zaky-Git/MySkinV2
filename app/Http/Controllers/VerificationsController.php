@@ -89,5 +89,45 @@ class VerificationsController extends Controller
 
         return response()->json($daftarPasien);
     }
+    public function updateVerification(int $id, Request $request)
+    {
+        $verif = Verifications::where('skin_analysis_id', $id)->first();
+        $skinAnalysis = SkinAnalysis::find($id);
 
+        if (!$skinAnalysis) {
+            return response()->json(['message' => 'Skin analysis not found'], 404);
+        }
+        if ($verif) {
+            $verif->verified_melanoma = $request->input('verifiedMelanoma');
+            $verif->doctor_id = $request->input('doctor_id');
+            $verif->save();
+            $skinAnalysis->catatanDokter = $request->input('catatanDokter');
+            $skinAnalysis->save();
+
+            return response()->json(['message' => 'Berhasil memperbarui verifikasi'], 200);
+        } else {
+            return response()->json(['message' => 'Verifikasi tidak ditemukan'], 404);
+        }
+    }
+
+    public function deleteVerificationBySkinAnalysisId($id)
+    {
+        $verif = Verifications::where('skin_analysis_id', $id)->first();
+        $skinAnalysis = SkinAnalysis::find($id);
+
+        if (!$skinAnalysis) {
+            return response()->json(['message' => 'Skin analysis not found'], 404);
+        }
+        if ($verif) {
+            $verif->delete();
+            $skinAnalysis->verified = false;
+            $skinAnalysis->verified_by = null;
+            $skinAnalysis->catatanDokter = null;
+            $skinAnalysis->save();
+
+            return response()->json(['message' => 'Berhasil menghapus verifikasi'], 200);
+        } else {
+            return response()->json(['message' => 'Verifikasi tidak ditemukan'], 404);
+        }
+    }
 }

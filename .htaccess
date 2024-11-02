@@ -1,0 +1,20 @@
+RewriteEngine On
+RewriteBase /myskin/
+
+# Mengizinkan akses ke file statis React
+<FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico|svg)$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>
+
+# Mengarahkan permintaan API ke Laravel
+RewriteCond %{REQUEST_URI} ^/myskin/api/
+RewriteRule ^api/(.*)$ /myskin/laravel/public/index.php [L]
+
+# Memastikan permintaan ke file atau direktori yang ada tidak diarahkan ke React
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Mengarahkan semua permintaan lainnya ke index.html React
+RewriteRule ^(.*)$ /myskin/index.html [L]
