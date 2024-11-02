@@ -14,16 +14,17 @@ return new class extends Migration
         Schema::create('verifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('skin_analysis_result_id');
+            $table->unsignedBigInteger('doctor_id')->nullable();
+            $table->unsignedBigInteger('skin_analysis_id');
             $table->boolean('verified')->default(false);
+            $table->boolean('verified_melanoma')->default(false);
             $table->timestamp('verification_date')->nullable();
             $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
-            $table->foreign('skin_analysis_result_id')->references('id')->on('skin_analysis_results')->onDelete('cascade');
+            $table->foreign('skin_analysis_id')->references('id')->on('skin_analysis')->onDelete('cascade');
         });
     }
 

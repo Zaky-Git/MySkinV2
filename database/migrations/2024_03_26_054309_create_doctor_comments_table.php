@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('doctor_comments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('skin_analysis_result_id');
+            $table->unsignedBigInteger('skin_analysis_id');
             $table->unsignedBigInteger('doctor_id');
             $table->text('comment');
             $table->timestamps();
 
             // Foreign key constraints
-            $table->foreign('skin_analysis_result_id')->references('id')->on('skin_analysis_results')->onDelete('cascade');
+            $table->foreign('skin_analysis_id')->references('id')->on('skin_analysis')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
         });
     }

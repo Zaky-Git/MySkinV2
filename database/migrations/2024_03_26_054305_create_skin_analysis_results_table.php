@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('skin_analysis_results', function (Blueprint $table) {
+        Schema::create('skin_analysis', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('image_path');
             $table->boolean('melanoma_detected')->default(false);
-            $table->text('analysis_result_description')->nullable();
+            $table->text('keluhan')->nullable();
+            $table->text('catatanDokter')->nullable();
             $table->boolean('verified')->default(false);
             $table->unsignedBigInteger('verified_by')->nullable();
             $table->timestamp('verification_date')->nullable();
+            $table->float('analysis_percentage')->nullable();
+            $table->boolean('is_sudah_pengajuan')->default(false);
             $table->timestamps();
 
             // Foreign key constraints
@@ -33,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('skin_analysis_results');
+        Schema::dropIfExists('skin_analysis');
     }
 };

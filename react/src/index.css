@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*dashboard*/
+.dashboard{
+    display: flex;
+    gap: 20px;
+    height: 100%;
+}
+.dashboard-content{
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+}
+
+.content{
+    width: 60%;
+}
+
+/*card css*/
+.card-container{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.card-custom{
+    flex: 1;
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-cover{
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.card-title{
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 12px;
+}
+
+.card-subtitle{
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/*list css*/
+.list-header{
+    width: 60%;
+    display: flex;
+    margin: 1rem;
+    justify-content: space-between;
+}
+
+.pasien{
+    flex: 1;
+    margin-top: 2rem;
+}
+
+.detail-dokter{
+    width: 40%;
+}
+
+.homepage-container {
+    font-family: 'PoppinFont', sans-serif;
+}
+
+.hero-section {
+    background-image: url('../src/assets/female-doctor-diagnosing-melanoma-body-female-patient.jpg');
+}
+
+.content h1 {
+    font-size: 3rem;
+}
+
+.service-card {
+    padding: 2rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+
