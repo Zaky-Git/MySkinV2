@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axiosClient from "../../axios-client.js";
 import { ClipLoader } from "react-spinners";
 import { confirmAlert } from "react-confirm-alert";
