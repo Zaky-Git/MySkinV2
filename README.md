@@ -41,12 +41,17 @@ Pastikan Anda sudah menginstal software berikut sebelum memulai proyek:
    php artisan migrate
    ```
 
-   d. **Menjalankan Server Laravel**
+   d. **Database Seeding**
+   ```bash
+   php artisan db:seed
+   ```
+
+   e. **Menjalankan Server Laravel**
    ```bash
    php artisan serve
    ```
 
-   e. **(Optional) Jika Mengalami Error CORS atau API Tidak Dapat Diakses**
+   f. **(Optional) Jika Mengalami Error CORS atau API Tidak Dapat Diakses**
    
       Jalankan perintah berikut untuk membersihkan dan memperbarui cache konfigurasi:
 
