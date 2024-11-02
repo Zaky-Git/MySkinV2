@@ -26,13 +26,23 @@ const DokterDashboard = () => {
         if (user && user.id) {
             const fetchData = async () => {
                 try {
-                    const userResponse = await axiosClient.get(`/doctor/${user.id}/patients-count`);
-                    const unverResponse = await axiosClient.get(`/doctor/${user.id}/countUserUnver`);
-                    const verResponse = await axiosClient.get(`/doctor/${user.id}/countUserVer`);
-                    const pasienResponse = await axiosClient.get(`/listPasien/${user.id}`);
-                    const ajuanResponse = await axiosClient.get(`/ajuanVerifikasi/${user.id}`);
+                    const userResponse = await axiosClient.get(
+                        `/doctor/${user.id}/patients-count`
+                    );
+                    const unverResponse = await axiosClient.get(
+                        `/doctor/${user.id}/countUserUnver`
+                    );
+                    const verResponse = await axiosClient.get(
+                        `/doctor/${user.id}/countUserVer`
+                    );
+                    const pasienResponse = await axiosClient.get(
+                        `/listPasien/${user.id}`
+                    );
+                    const ajuanResponse = await axiosClient.get(
+                        `/ajuanVerifikasi/${user.id}`
+                    );
 
-                    setSumPasien(userResponse.data);
+                    setSumPasien(userResponse.data.patient_count);
                     setSumUnver(unverResponse.data);
                     setSumVer(verResponse.data);
                     setPasien(pasienResponse.data);
@@ -75,49 +85,72 @@ const DokterDashboard = () => {
                             </h3>
                             {loading ? (
                                 <div className="flex items-center justify-center">
-                                    <ClipLoader color="#4A90E2" loading={loading} size={35} />
+                                    <ClipLoader
+                                        color="#4A90E2"
+                                        loading={loading}
+                                        size={35}
+                                    />
                                     <span className="ml-2">Memuat data...</span>
                                 </div>
                             ) : (
                                 <table className="table table-hover">
                                     <thead>
-                                    <tr>
-                                        <th className="col-4">Tanggal</th>
-                                        <th className="col-4">Pasien</th>
-                                        <th className="col-4">Diagnosis AI</th>
-                                        <th className="col-4"></th>
-                                    </tr>
+                                        <tr>
+                                            <th className="col-4">Tanggal</th>
+                                            <th className="col-4">Pasien</th>
+                                            <th className="col-4">
+                                                Diagnosis AI
+                                            </th>
+                                            <th className="col-4"></th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {ajuan.map((item, index) => (
-                                        <tr key={index}>
-                                            <td>{new Date(item.created_at).toLocaleDateString()}</td>
-                                            <td>{item.firstName + " " + item.lastName}</td>
-                                            <td>
-                                                <span
-                                                    className={`${
-                                                        item.analysis_percentage < 50
-                                                            ? "text-green-500"
-                                                            : "text-red-500"
-                                                    }`}
-                                                >
-                                                    {item.analysis_percentage}%{" Melanoma"}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    onClick={() => handleVerifikasiClick(item.id)}
-                                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                                    Verifikasi
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                        {ajuan.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    {new Date(
+                                                        item.created_at
+                                                    ).toLocaleDateString()}
+                                                </td>
+                                                <td>
+                                                    {item.firstName +
+                                                        " " +
+                                                        item.lastName}
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        className={`${
+                                                            item.analysis_percentage <
+                                                            50
+                                                                ? "text-green-500"
+                                                                : "text-red-500"
+                                                        }`}
+                                                    >
+                                                        {
+                                                            item.analysis_percentage
+                                                        }
+                                                        %{" Melanoma"}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleVerifikasiClick(
+                                                                item.id
+                                                            )
+                                                        }
+                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                    >
+                                                        Verifikasi
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             )}
                             {ajuan.length === 0 && !loading && (
-                                <div className="flex items-center justify-center h-[50vh]">
+                                <div className="flex items-center justify-center h-full">
                                     <span className="ml-2">
                                         Tidak ada pengajuan verifikasi.
                                     </span>
@@ -127,56 +160,50 @@ const DokterDashboard = () => {
                     </div>
                 </div>
                 <div className="pasien">
-                    <div className="card-custom shadow-xl p-3" style={{height: "100%"}}>
+                    <div
+                        className="card-custom shadow-xl p-3"
+                        style={{ height: "100%" }}
+                    >
                         <h3 className="font-bold">
                             Pasien
-                            <hr/>
+                            <hr />
                         </h3>
                         {loading ? (
                             <div className="flex items-center justify-center">
-                                <ClipLoader color="#4A90E2" loading={loading} size={35}/>
+                                <ClipLoader
+                                    color="#4A90E2"
+                                    loading={loading}
+                                    size={35}
+                                />
                                 <span className="ml-2">Memuat data...</span>
                             </div>
                         ) : (
                             <table className="table table-hover">
                                 <thead>
-                                <tr>
-                                    <th className="col-4">Nama</th>
-                                    <th className="col-4">Nomor Telepon</th>
-                                    <th className="col-4">Diagnosis AI</th>
-                                    <th className="col-4"></th>
-                                </tr>
+                                    <tr>
+                                        <th className="col-4">Nama</th>
+                                        <th className="col-4">Nomor Telepon</th>
+                                        <th className="col-4">Jumlah Ajuan</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                {pasien.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            {item.firstName + " " + item.lastName}
-                                        </td>
-                                        <td>
-                                            {item.number}
-                                        </td>
-                                        <td>
-                                            <span
-                                                className={`${
-                                                    item.analysis_percentage < 50
-                                                        ? "text-green-500"
-                                                        : "text-red-500"
-                                                }`}
-                                            >
-                                                {item.analysis_percentage}%{" Melanoma"}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
+                                    {pasien.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>
+                                                {item.firstName +
+                                                    " " +
+                                                    item.lastName}
+                                            </td>
+                                            <td>{item.number}</td>
+                                            <td>{item.jumlah_ajuan}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         )}
                         {pasien.length === 0 && !loading && (
                             <div className="flex items-center justify-center h-[50vh]">
-                            <span className="ml-2">
-                                Tidak ada pasien.
-                            </span>
+                                <span className="ml-2">Tidak ada pasien.</span>
                             </div>
                         )}
                     </div>

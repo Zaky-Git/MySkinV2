@@ -104,7 +104,7 @@ const DetailPengajuan = () => {
     let [color, setColor] = useState("#2AA8FF");
 
     return (
-        <div className="flex flex-col justify-between w-screen mt-8">
+        <div className="flex flex-col justify-between w-screen mt-8 mb-8">
             {loading && (
                 <div className="fixed top-0 left-0 w-full h-screen z-50">
                     <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-40"></div>
@@ -179,11 +179,11 @@ const DetailPengajuan = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-white p-8 rounded-md shadow-md w-full">
+                        <div className="bg-white p-8 rounded-md shadow-md  w-full">
                             <div className="mb-3">
                                 <h4>Prediksi Penyakit</h4>
                             </div>
-                            <div className="flex flex-col lg:flex-row mt-8">
+                            <div className="flex flex-col xl:flex-row mt-8">
                                 <div
                                     className={`poppin-font text-white bg-white container flex items-center flex-col`}
                                 >
@@ -257,20 +257,21 @@ const DetailPengajuan = () => {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="bg-white rounded-md mt-4">
+                                        <div className="flex flex-col">
+                                            <div className="mb-1 mt-1">
+                                                <h5>Catatan Dokter : </h5>
+                                            </div>
+                                            <div className="p-3 border border-black h-52  overflow-y-auto">
+                                                {catatan == null ||
+                                                catatan === ""
+                                                    ? "Tidak ada"
+                                                    : catatan}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="bg-white p-8 rounded-md shadow-md mb-8">
-                        <div className="flex flex-col">
-                            <div className="mb-1 mt-1">
-                                <h5>Catatan : </h5>
-                            </div>
-                            <textarea
-                                readOnly
-                                className="p-3 border border-black h-52 w-full overflow-y-auto"
-                                value={catatan}
-                            />
                         </div>
                     </div>
                 </div>

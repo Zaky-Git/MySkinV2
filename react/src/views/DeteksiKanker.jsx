@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import Cropper from "react-easy-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import getCroppedImg from "../functions/cropImage";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -12,7 +12,10 @@ import axiosClient from "../../axios-client";
 import RingLoader from "react-spinners/RingLoader";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { Carousel } from "react-bootstrap";
+import femaleDoctor from "../assets/female-doctor-diagnosing-melanoma-body-female-patient.jpg";
+import doctorGloves from "../assets/doctor-getting-hand-gloves.jpg";
+import biorobots from "../assets/3d-rendering-biorobots-concept.jpg";
 const ITEMS_PER_PAGE = 8;
 
 const DeteksiKanker = () => {
@@ -35,6 +38,7 @@ const DeteksiKanker = () => {
     const [listDokter, setListDokter] = useState(null);
 
     const [skinAnalysisId, setSkinAnalysisId] = useState(null);
+    const targetSectionRef = useRef(null);
 
     const { user, token, role } = useStateContext();
 
@@ -78,6 +82,7 @@ const DeteksiKanker = () => {
             setLoading(false);
             setState("analisa");
         } catch (e) {
+            toast.error("Gagal menganalisa gambar");
             setLoading(false);
             console.error(e);
         }
@@ -258,9 +263,18 @@ const DeteksiKanker = () => {
         });
     };
     let [color, setColor] = useState("#2AA8FF");
+    const images = [femaleDoctor, doctorGloves, biorobots];
 
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const handleSelect = (selectedIndex) => {
+        setActiveIndex(selectedIndex);
+    };
+    const handleScrollToTargetSection = () => {
+        targetSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    };
     return (
-        <div className="flex flex-col justify-between w-screen mt-8">
+        <div className="flex flex-col justify-between mt-8">
             {loading && (
                 <div className="fixed top-0 left-0 w-full h-screen z-50">
                     <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-40"></div>
@@ -277,50 +291,162 @@ const DeteksiKanker = () => {
             )}
             {state == "upload" ? (
                 <div className="">
-                    <div className="text-center flex flex-col items-center w-screen  ">
-                        <h1 className="poppin-font fw-bolder mt-4 mb-4">
-                            Deteksi Kanker
-                        </h1>
-                        <div className="poppin-font container-sm mb-4">
-                            <h5 className="text-muted">
-                                Masukkan gambar untuk mendeteksi kanker dari
-                                gambar yang diberikan.
-                            </h5>
+                    <div className="homepage-container m-3">
+                        <div className="hero-section relative h-[60vh] rounded-lg bg-cover bg-center flex items-center justify-center overflow-hidden">
+                            <div className="overlay absolute inset-0 bg-black opacity-65 rounded-lg"></div>
+                            <div className="container relative">
+                                <h1 className="text-5xl font-bold text-primaryTW">
+                                    MySkin
+                                </h1>
+                                <p className="text-lg text-white max-w-md">
+                                    Deteksi penyakit kulit Melanoma online
+                                    dengan teknologi kecerdasan buatan
+                                </p>
+                                <div className="mb-4 poppin-font text-white">
+                                    <button
+                                        className="bg-primaryTW w-40 rounded-md px-4 py-2"
+                                        onClick={handleScrollToTargetSection}
+                                    >
+                                        Coba Sekarang
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div className="mb-4 poppin-font text-white ">
-                            <div className=" bg-primaryTW w-40 rounded-md px-4 py-2 ">
-                                <input
-                                    type="file"
-                                    accept=".jpg,.jpeg,.png"
-                                    onChange={handleFileChange}
-                                    style={{ display: "none" }}
-                                    id="upload-image"
-                                />
-                                <label
-                                    htmlFor="upload-image"
-                                    className="cursor-pointer"
-                                >
-                                    <div className="font-bold">
-                                        Pilih Gambar
+                        <div className="services-section w-full mt-3">
+                            <div className="w-full rounded-lg bg-whiteTW p-6">
+                                <div className="flex flex-wrap container">
+                                    <div className="w-full md:w-1/3 px-4">
+                                        <div
+                                            className={`service-card text-center p-4 bg-white shadow-md rounded-lg ${
+                                                activeIndex === 0
+                                                    ? "border-primaryTW border-4"
+                                                    : ""
+                                            }`}
+                                        >
+                                            <h3 className="text-xl font-bold mb-2">
+                                                Deteksi Awal
+                                            </h3>
+                                            <p className="text-gray-600">
+                                                MySkin membantu mendeteksi
+                                                gejala awal melanoma untuk
+                                                penanganan yang lebih cepat
+                                            </p>
+                                        </div>
                                     </div>
-                                </label>
+                                    <div className="w-full md:w-1/3 px-4">
+                                        <div
+                                            className={`service-card text-center p-4 bg-white shadow-md rounded-lg ${
+                                                activeIndex === 1
+                                                    ? "border-primaryTW border-4"
+                                                    : ""
+                                            }`}
+                                        >
+                                            <h3 className="text-xl font-bold mb-2">
+                                                Diagnosis Dokter
+                                            </h3>
+                                            <p className="text-gray-600">
+                                                MySkin menyediakan 10+ dokter
+                                                untuk memverifikasi penyakit
+                                                Anda
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="w-full md:w-1/3 px-4">
+                                        <div
+                                            className={`service-card text-center p-4 bg-white shadow-md rounded-lg ${
+                                                activeIndex === 2
+                                                    ? "border-primaryTW border-4"
+                                                    : ""
+                                            }`}
+                                        >
+                                            <h3 className="text-xl font-bold mb-2">
+                                                Diagnosis AI
+                                            </h3>
+                                            <p className="text-gray-600">
+                                                MySkin menggunakan kecerdasan
+                                                buatan yang andal untuk
+                                                menganalisa kulit Anda
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="container carousel-section z-0">
+                                        <Carousel
+                                            activeIndex={activeIndex}
+                                            onSelect={handleSelect}
+                                        >
+                                            {images.map((image, index) => (
+                                                <Carousel.Item key={index}>
+                                                    <img
+                                                        className="d-block px-4 w-100"
+                                                        src={image}
+                                                        alt={`Slide ${
+                                                            index + 1
+                                                        }`}
+                                                        style={{
+                                                            height: "500px",
+                                                            width: "500px",
+                                                            objectFit: "cover",
+                                                        }}
+                                                    />
+                                                </Carousel.Item>
+                                            ))}
+                                        </Carousel>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div
-                        className="poppin-font align-items-center text-muted"
-                        style={{ width: "500px", margin: "auto" }}
+                        className="rounded-lg bg-whiteTW m-3 pb-2"
+                        ref={targetSectionRef}
                     >
-                        <h3 className="text-center">Aturan Gambar</h3>
+                        <div className="text-center flex flex-col items-center">
+                            <h1 className="poppin-font fw-bolder mt-4 mb-4">
+                                Deteksi Kanker Kulit
+                            </h1>
+                            <div className="poppin-font container-sm mb-4">
+                                <h5 className="text-muted">
+                                    Masukkan gambar untuk mendeteksi kanker dari
+                                    gambar yang diberikan.
+                                </h5>
+                            </div>
+                            <div className="mb-4 poppin-font text-white ">
+                                <div className=" bg-primaryTW w-40 rounded-md px-4 py-2 ">
+                                    <input
+                                        type="file"
+                                        accept=".jpg,.jpeg,.png"
+                                        onChange={handleFileChange}
+                                        style={{ display: "none" }}
+                                        id="upload-image"
+                                    />
+                                    <label
+                                        htmlFor="upload-image"
+                                        className="cursor-pointer"
+                                    >
+                                        <div className="font-bold">
+                                            Pilih Gambar
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                         <div
-                            className="container-sm"
-                            style={{ width: "400px" }}
+                            className="poppin-font align-items-center text-muted"
+                            style={{ width: "500px", margin: "auto" }}
                         >
-                            <ol type="1">
-                                <li>1. Format: JPEG, PNG.</li>
-                                <li>2. Ukuran: Maksimum 5 MB.</li>
-                                <li>3. Resolusi: Minimal 800 x 600 piksel.</li>
-                            </ol>
+                            <h3 className="text-center">Aturan Gambar</h3>
+                            <div
+                                className="container-sm"
+                                style={{ width: "400px" }}
+                            >
+                                <ol type="1">
+                                    <li>1. Format: JPEG, PNG.</li>
+                                    <li>2. Ukuran: Maksimum 5 MB.</li>
+                                    <li>
+                                        3. Resolusi: Minimal 800 x 600 piksel.
+                                    </li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -461,7 +587,11 @@ const DeteksiKanker = () => {
                                                             : "text-green-500"
                                                     }`}
                                                 >
-                                                    : {keakuratan}%
+                                                    : {keakuratan}% Melanoma (
+                                                    {keakuratan > 60
+                                                        ? "Berbahaya"
+                                                        : "Aman"}
+                                                    )
                                                 </div>
                                             </div>
                                         </div>

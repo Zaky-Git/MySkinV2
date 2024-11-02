@@ -393,11 +393,13 @@ const DetailDeteksi = () => {
                                                                             </div>
                                                                             <div>
                                                                                 :{" "}
-                                                                                {
-                                                                                    data
-                                                                                        .skin_analysis
-                                                                                        .catatanDokter
-                                                                                }
+                                                                                {data
+                                                                                    .skin_analysis
+                                                                                    .catatanDokter
+                                                                                    ? data
+                                                                                          .skin_analysis
+                                                                                          .catatanDokter
+                                                                                    : "Tidak ada"}
                                                                             </div>
                                                                         </div>
                                                                         <div className="flex gap-3 ">

@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\User;
 use App\Models\Verifications;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -22,22 +23,21 @@ class UserController extends Controller
     public function getUserByDoctor($doctor_id)
     {
         $daftarPasien = Verifications::where('verifications.doctor_id', $doctor_id)
-            ->where('verifications.verified', 0)
             ->join('skin_analysis', 'verifications.skin_analysis_id', '=', 'skin_analysis.id')
             ->join('users', 'verifications.user_id', '=', 'users.id')
-            ->with(['doctor', 'skinAnalysis', 'user'])
-            ->distinct()
-            ->get([
+            ->select(
                 'verifications.user_id',
-                'verifications.created_at',
-                'skin_analysis.analysis_percentage',
                 'users.firstName',
                 'users.lastName',
-                'users.number'
-            ]);
+                'users.number',
+                DB::raw('COUNT(verifications.id) as jumlah_ajuan'),
+            )
+            ->groupBy('verifications.user_id', 'users.firstName', 'users.lastName', 'users.number')
+            ->get();
 
         return response()->json($daftarPasien);
     }
+
 
     public function getAllUserByDoctor($doctor_id)
     {

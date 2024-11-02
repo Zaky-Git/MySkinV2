@@ -100,7 +100,7 @@ const AdminDashboard = ({ openBerhasil }) => {
     return (
         <div className="dashboard poppin-font">
             <ToastContainer />
-            <div className="dashboard-content">
+            <div className="dashboard-content container">
                 <div className="content">
                     <Card
                         icon1={faHospitalUser}

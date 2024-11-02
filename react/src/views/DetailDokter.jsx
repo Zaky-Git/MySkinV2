@@ -143,7 +143,7 @@ const DetailDokter = () => {
             </div>
             <div className="card-custom shadow-xl p-3 mt-4">
                 <h2 className="font-bold">
-                    Riwayat Verifikasi
+                    Ajuan Verifikasi
                     <hr />
                 </h2>
                 {loadingPatients ? (
