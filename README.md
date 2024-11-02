@@ -100,7 +100,7 @@ Pastikan Anda sudah menginstal software berikut sebelum memulai proyek:
 
    b. **Install Dependencies**
    ```bash
-   pip install Flask tensorflow
+   pip install Flask tensorflow pillow   
    ```
 
    c. **Menjalankan Server Flask**
