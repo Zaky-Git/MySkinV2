@@ -1,3 +1,7 @@
+Berikut adalah versi yang sudah dirapikan:
+
+---
+
 # MySkin V2
 
 MySkin adalah sistem deteksi kanker kulit melanoma menggunakan Convolutional Neural Networks (CNN) melalui platform web berbasis Laravel 11 dan ReactJS. Sistem ini bertujuan memberikan layanan deteksi melanoma kepada pengguna secara mudah dan cepat.
@@ -9,8 +13,8 @@ MySkin adalah sistem deteksi kanker kulit melanoma menggunakan Convolutional Neu
 Pastikan Anda sudah menginstal software berikut sebelum memulai proyek:
 - **Node.js**: Versi 14 atau lebih tinggi.
 - **Composer**: Versi 2.5.8 atau lebih tinggi.
-- **PHP**:  Versi 8.2 atau lebih tinggi.
-- **Python**: Versi 3.6 atau lebih tinggi
+- **PHP**: Versi 8.2 atau lebih tinggi.
+- **Python**: Versi 3.6 atau lebih tinggi.
 - **Database**: MySQL.
 
 ### Installation Steps
@@ -37,26 +41,66 @@ Pastikan Anda sudah menginstal software berikut sebelum memulai proyek:
    php artisan migrate
    ```
 
-   d. **Menjalankan Server Lokal**
+   d. **Menjalankan Server Laravel**
    ```bash
    php artisan serve
    ```
 
+   e. **(Optional) Jika Mengalami Error CORS atau API Tidak Dapat Diakses**
+   
+      Jalankan perintah berikut untuk membersihkan dan memperbarui cache konfigurasi:
+
+      ```bash
+      php artisan config:clear
+      php artisan config:cache
+      ```
+
+      Perintah `config:clear` akan menghapus cache konfigurasi, sedangkan `config:cache` akan membuat cache konfigurasi baru. Ini memastikan bahwa perubahan pada file `.env` dan konfigurasi lainnya diterapkan dengan benar.
+
+      Setelah itu, lanjutkan menjalankan server Laravel:
+
+      ```bash
+      php artisan serve
+      ```
+
+      Perintah tambahan ini membantu menghindari konflik konfigurasi yang mungkin muncul akibat perubahan pada file `.env` atau file konfigurasi lain di Laravel.
+
 3. **Frontend Setup (React)**
    
-   a. **Masuk ke folder frontend**
+   a. **Masuk ke Folder Frontend**
    ```bash
    cd react
    ```
 
-   b. **Install Dependencies**
+   b. **Konfigurasi Environment**
+   - Salin file `.env.example` ke `.env`
+   - Setting vite_base_api_url di file `.env` sesuai url backend
+
+   c. **Install Dependencies**
    ```bash
    npm install
    ```
 
-   c. **Menjalankan Server Development**
+   d. **Menjalankan Server React**
    ```bash
    npm run dev
+   ```
+
+4. **AI Setup (Flask)**
+   
+   a. **Masuk ke Folder Flask**
+   ```bash
+   cd flask
+   ```
+
+   b. **Install Dependencies**
+   ```bash
+   pip install Flask tensorflow
+   ```
+
+   c. **Menjalankan Server Flask**
+   ```bash
+   python app.py
    ```
 
 ### Testing Requirements

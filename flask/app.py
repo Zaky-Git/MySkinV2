@@ -13,7 +13,7 @@ MODEL_PATH = 'aug_model.weights.best.hdf5'
 try:
     # Load the model architecture and weights without the optimizer
     model = load_model(MODEL_PATH, compile=False)
-    
+
     # Re-compile the model with a new optimizer
     model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
     print("Model loaded and compiled successfully.")
