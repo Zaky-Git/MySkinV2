@@ -19,6 +19,45 @@ const RiwayatDeteksi = () => {
     const [keluhan, setKeluhan] = useState("");
     const [currentId, setCurrentId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchDate, setSearchDate] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5; // Jumlah item per halaman
+
+
+        // Hitung indeks data untuk halaman saat ini
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        const currentData = data.slice(indexOfFirstItem, indexOfLastItem);
+
+        // Fungsi untuk mengubah halaman
+        const goToPage = (pageNumber) => {
+            setCurrentPage(pageNumber);
+        };
+
+        const totalPages = Math.ceil(data.length / itemsPerPage);
+
+        const searchByDate = async () => {
+            if (!searchDate) {
+                toast.error("Harap pilih tanggal");
+                return;
+            }
+
+            try {
+                const response = await axiosClient.get(
+                    `/skinAnalysis/searchByDate`,
+                    { params: { date: searchDate } }
+                );
+                setData(response.data);
+                setCurrentPage(1); // Reset ke halaman pertama setelah pencarian
+            } catch (error) {
+                console.error("Error fetching search results:", error);
+                if (error.response && error.response.status === 404) {
+                    toast.error("Tidak ada data untuk tanggal tersebut");
+                } else {
+                    toast.error("Gagal mengambil data");
+                }
+            }
+        };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -105,6 +144,21 @@ const RiwayatDeteksi = () => {
                     Riwayat Deteksi
                     <hr />
                 </h3>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault(); // Mencegah halaman refresh
+                        searchByDate(); // Memanggil fungsi searchByDate
+                    }}
+                >
+                    <input
+                        type="date"
+                        value={searchDate}
+                        onChange={(e) => setSearchDate(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Cari</button>
+                </form>
+
                 {loading ? (
                     <div className="flex items-center justify-center h-[50vh]">
                         <ClipLoader
@@ -114,7 +168,7 @@ const RiwayatDeteksi = () => {
                         />
                         <span className="ml-2">Memuat data...</span>
                     </div>
-                ) : data.length > 0 ? (
+                ) : currentData.length > 0 ? (
                     <table className="table table-hover">
                         <thead>
                             <tr>
@@ -128,7 +182,7 @@ const RiwayatDeteksi = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((item, index) => (
+                            {currentData.map((item, index) => (
                                 <tr key={index}>
                                     <td>
                                         {new Date(
@@ -238,9 +292,42 @@ const RiwayatDeteksi = () => {
                             ))}
                         </tbody>
                     </table>
+
                 ) : (
                     <div></div>
                 )}
+                < div className="pagination flex justify-center mt-4">
+
+
+                    <button
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 mx-1 bg-blue-500 text-white rounded disabled:opacity-50"
+                    >
+                        Prev
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => goToPage(i + 1)}
+                            className={`px-3 py-1 mx-1 rounded ${
+                                currentPage === i + 1
+                                    ? "text-blue-500"
+                                    : "text-gray-300"
+                            }`}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                    <button
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 mx-1 bg-blue-500 text-white rounded disabled:opacity-50"
+                    >
+                        Next
+                    </button>
+
+                </div>
 
                 {data.length == 0 && !loading && (
                     <div className="flex items-center justify-center h-[50vh]">
