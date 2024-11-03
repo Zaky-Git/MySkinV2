@@ -122,12 +122,11 @@ const RiwayatPengajuan = () => {
                                     </td>
                                     <td>
                                         <span
-                                            className={`${
-                                                item.skin_analysis
-                                                    .analysis_percentage < 60
-                                                    ? "text-green-500"
-                                                    : "text-red-500"
-                                            }`}
+                                            className={`${item.skin_analysis
+                                                .analysis_percentage < 60
+                                                ? "text-green-500"
+                                                : "text-red-500"
+                                                }`}
                                         >
                                             {
                                                 item.skin_analysis
@@ -149,17 +148,16 @@ const RiwayatPengajuan = () => {
                                     </td>
                                     <td>
                                         {item.skin_analysis.keluhan == "" ||
-                                        item.skin_analysis.keluhan == null
+                                            item.skin_analysis.keluhan == null
                                             ? "Tidak ada"
                                             : item.skin_analysis.keluhan}
                                     </td>
                                     <td>
                                         <span
-                                            className={`${
-                                                !item.verified
-                                                    ? "text-red-500"
-                                                    : "text-green-500"
-                                            }`}
+                                            className={`${!item.verified
+                                                ? "text-red-500"
+                                                : "text-green-500"
+                                                }`}
                                         >
                                             {item.verified
                                                 ? "Verified"
@@ -168,17 +166,17 @@ const RiwayatPengajuan = () => {
                                     </td>
                                     <td>
                                         {item.skin_analysis.verification_date ==
-                                        null
+                                            null
                                             ? "Unverified"
                                             : new Date(
-                                                  item.skin_analysis.verification_date
-                                              ).toLocaleDateString()}
+                                                item.skin_analysis.verification_date
+                                            ).toLocaleDateString()}
                                     </td>
                                     <td>
                                         {item.doctor
                                             ? item.doctor.firstName +
-                                              " " +
-                                              item.doctor.lastName
+                                            " " +
+                                            item.doctor.lastName
                                             : "Belum ditentukan"}
                                     </td>
                                     <td>
@@ -191,7 +189,7 @@ const RiwayatPengajuan = () => {
                                     <td>
                                         {item.skin_analysis.catatanDokter ==
                                             null ||
-                                        item.skin_analysis.catatanDokter == ""
+                                            item.skin_analysis.catatanDokter == ""
                                             ? "Tidak ada"
                                             : item.skin_analysis.catatanDokter}
                                     </td>
