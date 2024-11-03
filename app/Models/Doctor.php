@@ -51,4 +51,8 @@ class Doctor extends Model
     {
         return $this->hasMany(SkinAnalysis::class, 'verified_by');
     }
+
+    public function comments(){
+        return $this->hasMany(DoctorComments::class);
+    }
 }

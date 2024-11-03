@@ -109,4 +109,18 @@ class DoctorController extends Controller
 
         return response()->json($daftarPasien);
     }
+
+    public function countDoctorComments()
+    {
+        
+        $doctors = Doctor::withCount('comments')->get();
+
+        return response()->json($doctors->map(function ($doctor) {
+            return [
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->firstName . ' ' . $doctor->lastName,
+                'comment_count' => $doctor->comments_count,
+            ];
+        }));
+    }
 }
