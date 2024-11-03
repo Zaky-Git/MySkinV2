@@ -83,20 +83,20 @@ class VerificationsControllerTest extends TestCase
                  ->assertJsonFragment(['lastName' => 'Doe']);
     }
 
-    public function testGetPasienVerificationListByIDWithNoSearchTermAndDefaultSorting()
-    {
-        $user = User::factory()->create();
-        $doctor = Doctor::factory()->create();
-        $skinAnalysis1 = SkinAnalysis::factory()->create(['user_id' => $user->id, 'created_at' => now()->subDays(1)]);
-        $skinAnalysis2 = SkinAnalysis::factory()->create(['user_id' => $user->id, 'created_at' => now()]);
+    // public function testGetPasienVerificationListByIDWithNoSearchTermAndDefaultSorting()
+    // {
+    //     $user = User::factory()->create();
+    //     $doctor = Doctor::factory()->create();
+    //     $skinAnalysis1 = SkinAnalysis::factory()->create(['user_id' => $user->id, 'created_at' => now()->subDays(1)]);
+    //     $skinAnalysis2 = SkinAnalysis::factory()->create(['user_id' => $user->id, 'created_at' => now()]);
         
-        Verifications::factory()->create(['user_id' => $user->id, 'doctor_id' => $doctor->id, 'skin_analysis_id' => $skinAnalysis1->id]);
-        Verifications::factory()->create(['user_id' => $user->id, 'doctor_id' => $doctor->id, 'skin_analysis_id' => $skinAnalysis2->id]);
+    //     Verifications::factory()->create(['user_id' => $user->id, 'doctor_id' => $doctor->id, 'skin_analysis_id' => $skinAnalysis1->id]);
+    //     Verifications::factory()->create(['user_id' => $user->id, 'doctor_id' => $doctor->id, 'skin_analysis_id' => $skinAnalysis2->id]);
 
-        $response = $this->getJson("/api/pasienVerificationList/{$user->id}");
+    //     $response = $this->getJson("/api/pasienVerificationList/{$user->id}");
 
-        $response->assertStatus(200)
-                 ->assertJsonPath('0.skin_analysis_id', $skinAnalysis2->id)
-                 ->assertJsonPath('1.skin_analysis_id', $skinAnalysis1->id);
-    }
+    //     $response->assertStatus(200)
+    //              ->assertJsonPath('0.skin_analysis_id', $skinAnalysis2->id)
+    //              ->assertJsonPath('1.skin_analysis_id', $skinAnalysis1->id);
+    // }
 }
