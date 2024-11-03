@@ -20,21 +20,29 @@ class UserController extends Controller
         $userCount = User::all()->count();
         return response()->json($userCount);
     }
-    public function getUserByDoctor($doctor_id)
+    public function getUserByDoctor($doctor_id, Request $request)
     {
+        $search = $request->query('search', '');
+    
         $daftarPasien = Verifications::where('verifications.doctor_id', $doctor_id)
             ->join('skin_analysis', 'verifications.skin_analysis_id', '=', 'skin_analysis.id')
             ->join('users', 'verifications.user_id', '=', 'users.id')
+            ->where(function($query) use ($search) {
+                $query->where(DB::raw("CONCAT(users.firstName, ' ', users.lastName)"), 'LIKE', "%{$search}%")
+                    ->orWhere('users.number', 'LIKE', "%{$search}%");
+            })
             ->select(
                 'verifications.user_id',
                 'users.firstName',
                 'users.lastName',
                 'users.number',
-                DB::raw('COUNT(verifications.id) as jumlah_ajuan'),
+                'users.email',
+                'users.profile_picture_path',
+                DB::raw('COUNT(verifications.id) as jumlah_ajuan')
             )
-            ->groupBy('verifications.user_id', 'users.firstName', 'users.lastName', 'users.number')
+            ->groupBy('verifications.user_id', 'users.firstName', 'users.lastName', 'users.number', 'users.email', 'users.profile_picture_path')
             ->get();
-
+    
         return response()->json($daftarPasien);
     }
 

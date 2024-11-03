@@ -20,7 +20,19 @@ const DokterDashboard = () => {
     const [sumUnver, setSumUnver] = useState(0);
     const [sumVer, setSumVer] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
+
+    const fetchPasien = async (search = '') => {
+        try {
+            const pasienResponse = await axiosClient.get(
+                `/listPasien/${user.id}?search=${search}`
+            );
+            setPasien(pasienResponse.data);
+        } catch (error) {
+            console.error("Error fetching patients:", error);
+        }
+    };
 
     useEffect(() => {
         if (user && user.id) {
@@ -35,9 +47,9 @@ const DokterDashboard = () => {
                     const verResponse = await axiosClient.get(
                         `/doctor/${user.id}/countUserVer`
                     );
-                    const pasienResponse = await axiosClient.get(
-                        `/listPasien/${user.id}`
-                    );
+                    // const pasienResponse = await axiosClient.get(
+                    //     `/listPasien/${user.id}`
+                    // );
                     const ajuanResponse = await axiosClient.get(
                         `/ajuanVerifikasi/${user.id}`
                     );
@@ -45,8 +57,9 @@ const DokterDashboard = () => {
                     setSumPasien(userResponse.data.patient_count);
                     setSumUnver(unverResponse.data);
                     setSumVer(verResponse.data);
-                    setPasien(pasienResponse.data);
+                    // setPasien(pasienResponse.data);
                     setAjuan(ajuanResponse.data);
+                    await fetchPasien();
                     setLoading(false);
                 } catch (error) {
                     setLoading(false);
@@ -60,6 +73,11 @@ const DokterDashboard = () => {
 
     const handleVerifikasiClick = (id) => {
         navigate(`/dokter/verifikasi/${id}`);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        fetchPasien(e.target.value);
     };
 
     return (
@@ -164,10 +182,18 @@ const DokterDashboard = () => {
                         className="card-custom shadow-xl p-3"
                         style={{ height: "100%" }}
                     >
-                        <h3 className="font-bold">
-                            Pasien
-                            <hr />
-                        </h3>
+                        <div className="flex justify-between items-center mb-3">
+                        <h3 className="font-bold">Pasien</h3>
+                        <div className="search-container">
+                            <input
+                                type="text"
+                                placeholder="Cari pasien..."
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                className="form-control w-64"
+                            />
+                        </div>
+                    </div>
                         {loading ? (
                             <div className="flex items-center justify-center">
                                 <ClipLoader
