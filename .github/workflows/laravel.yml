@@ -20,10 +20,6 @@ jobs:
       run: composer install 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
     - name: Execute Feature tests via PHPUnit/Pest
       env:
         DB_CONNECTION: sqlite
