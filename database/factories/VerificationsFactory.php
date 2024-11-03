@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Doctor;
+use App\Models\SkinAnalysis;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,12 @@ class VerificationsFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'doctor_id' => Doctor::factory(),
+            'skin_analysis_id' => SkinAnalysis::factory(),
+            'verified' => $this->faker->boolean,
+            'verification_date' => $this->faker->dateTime,
+            'verified_melanoma' => $this->faker->boolean,
         ];
     }
 }
