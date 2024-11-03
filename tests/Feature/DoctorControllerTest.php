@@ -41,7 +41,7 @@ class DoctorControllerTest extends TestCase
         $response = $this->getJson('/api/doctorsCommentCounts');
 
 
-        $response->assertStatus(200);
+        $response->assertStatus(200); 
 
         $response->assertJsonCount(2); 
 
