@@ -38,7 +38,7 @@ class SkinAnalysisController extends Controller
             $response = $client->post('http://127.0.0.1:7000/predict', [
                 'multipart' => [
                     [
-                        'name'     => 'image',
+                        'name' => 'image',
                         'contents' => fopen($image->getPathname(), 'r'),
                         'filename' => $image->getClientOriginalName()
                     ]
@@ -215,4 +215,31 @@ class SkinAnalysisController extends Controller
 
         return response()->json(['message' => 'Keluhan updated'], 200);
     }
+
+
+public function searchByDate(Request $request)
+{
+    // Ambil tanggal yang dikirim dari parameter
+    $date = $request->input('date');
+
+    // Cek jika tanggal tidak ada dalam request
+    if (!$date) {
+        return response()->json(['message' => 'Tanggal tidak ditemukan'], 400);
+    }
+
+    // Query data berdasarkan tanggal dan user yang sedang login
+    $results = SkinAnalysis::whereDate('created_at', $date)
+        ->where('user_id', Auth::id()) // Filter data berdasarkan user yang sedang login
+        ->get();
+
+    // Cek jika hasil pencarian kosong
+    if ($results->isEmpty()) {
+        return response()->json(['message' => 'Tidak ada data untuk tanggal tersebut'], 404);
+    }
+
+    // Kembalikan hasil pencarian jika ada data
+    return response()->json($results);
+}
+
+
 }

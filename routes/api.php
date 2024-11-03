@@ -55,6 +55,9 @@ Route::get('/mySkinAnalysis/{id}', [SkinAnalysisController::class, 'getMySkinAna
 Route::get('/getSkinAnalysis/{id}', [SkinAnalysisController::class, 'getSkinAnalysisById']);
 Route::delete('/skinAnalysis/{id}', [SkinAnalysisController::class, 'deleteSkinAnalysisById']);
 Route::put('/updateKeluhanSkinAnalysis/{id}', [SkinAnalysisController::class, 'updateKeluhanById']);
+Route::get('/skinAnalysis/searchByDate', [SkinAnalysisController::class, 'searchByDate']);
+Route::middleware('auth:sanctum')->get('/skinAnalysis/searchByDate', [SkinAnalysisController::class, 'searchByDate']);
+
 
 
 #doctor
