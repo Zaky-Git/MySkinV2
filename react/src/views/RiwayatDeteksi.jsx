@@ -23,41 +23,40 @@ const RiwayatDeteksi = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5; // Jumlah item per halaman
 
+    // Hitung indeks data untuk halaman saat ini
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentData = data.slice(indexOfFirstItem, indexOfLastItem);
 
-        // Hitung indeks data untuk halaman saat ini
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        const currentData = data.slice(indexOfFirstItem, indexOfLastItem);
+    // Fungsi untuk mengubah halaman
+    const goToPage = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
-        // Fungsi untuk mengubah halaman
-        const goToPage = (pageNumber) => {
-            setCurrentPage(pageNumber);
-        };
+    const totalPages = Math.ceil(data.length / itemsPerPage);
 
-        const totalPages = Math.ceil(data.length / itemsPerPage);
+    const searchByDate = async () => {
+        if (!searchDate) {
+            toast.error("Harap pilih tanggal");
+            return;
+        }
 
-        const searchByDate = async () => {
-            if (!searchDate) {
-                toast.error("Harap pilih tanggal");
-                return;
+        try {
+            const response = await axiosClient.get(
+                `/skinAnalysis/searchByDate`,
+                { params: { date: searchDate } }
+            );
+            setData(response.data);
+            setCurrentPage(1); // Reset ke halaman pertama setelah pencarian
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+            if (error.response && error.response.status === 404) {
+                toast.error("Tidak ada data untuk tanggal tersebut");
+            } else {
+                toast.error("Gagal mengambil data");
             }
-
-            try {
-                const response = await axiosClient.get(
-                    `/skinAnalysis/searchByDate`,
-                    { params: { date: searchDate } }
-                );
-                setData(response.data);
-                setCurrentPage(1); // Reset ke halaman pertama setelah pencarian
-            } catch (error) {
-                console.error("Error fetching search results:", error);
-                if (error.response && error.response.status === 404) {
-                    toast.error("Tidak ada data untuk tanggal tersebut");
-                } else {
-                    toast.error("Gagal mengambil data");
-                }
-            }
-        };
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -156,7 +155,13 @@ const RiwayatDeteksi = () => {
                         onChange={(e) => setSearchDate(e.target.value)}
                         required
                     />
-                    <button type="submit">Cari</button>
+
+                    <button
+                        type="submit"
+                        className=" bg-gray-400 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded "
+                    >
+                        Cari
+                    </button>
                 </form>
 
                 {loading ? (
@@ -292,13 +297,10 @@ const RiwayatDeteksi = () => {
                             ))}
                         </tbody>
                     </table>
-
                 ) : (
                     <div></div>
                 )}
-                < div className="pagination flex justify-center mt-4">
-
-
+                <div className="pagination flex justify-center mt-4">
                     <button
                         onClick={() => goToPage(currentPage - 1)}
                         disabled={currentPage === 1}
@@ -326,7 +328,6 @@ const RiwayatDeteksi = () => {
                     >
                         Next
                     </button>
-
                 </div>
 
                 {data.length == 0 && !loading && (
