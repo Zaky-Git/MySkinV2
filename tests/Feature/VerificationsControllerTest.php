@@ -92,7 +92,7 @@ class VerificationsControllerTest extends TestCase
                  ->assertJsonFragment(['firstName' => 'John', 'lastName' => 'Doe']);
     }
 
-    public function test_get_pasien_verification_list_by_id_with_sorting()
+    public function test_get_pasien_verification_list_by_id_with_sorting_by_submission_date()
     {
         // Create a user
         $user = User::factory()->create();
@@ -117,7 +117,7 @@ class VerificationsControllerTest extends TestCase
             'created_at' => now(),
         ]);
 
-        // Make a request to the controller method with sorting
+        // Make a request to the controller method with sorting by submission date
         $response = $this->getJson("/api/pasienVerificationList/{$user->id}?sortKey=created_at");
 
         // Assert the response status and structure
@@ -150,5 +150,65 @@ class VerificationsControllerTest extends TestCase
         // Assert the order of the verifications
         $responseData = $response->json();
         $this->assertTrue($responseData[0]['created_at'] > $responseData[1]['created_at']);
+    }
+
+    public function test_get_pasien_verification_list_by_id_with_sorting_by_verification_status()
+    {
+        // Create a user
+        $user = User::factory()->create();
+
+        // Create related models
+        $doctor1 = Doctor::factory()->create();
+        $doctor2 = Doctor::factory()->create();
+        $skinAnalysis1 = SkinAnalysis::factory()->create(['user_id' => $user->id]);
+        $skinAnalysis2 = SkinAnalysis::factory()->create(['user_id' => $user->id]);
+
+        // Create verifications
+        Verifications::factory()->create([
+            'user_id' => $user->id,
+            'doctor_id' => $doctor1->id,
+            'skin_analysis_id' => $skinAnalysis1->id,
+            'verified' => false,
+        ]);
+        Verifications::factory()->create([
+            'user_id' => $user->id,
+            'doctor_id' => $doctor2->id,
+            'skin_analysis_id' => $skinAnalysis2->id,
+            'verified' => true,
+        ]);
+
+        // Make a request to the controller method with sorting by verification status
+        $response = $this->getJson("/api/pasienVerificationList/{$user->id}?sortKey=verified");
+
+        // Assert the response status and structure
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     '*' => [
+                         'id',
+                         'user_id',
+                         'doctor_id',
+                         'skin_analysis_id',
+                         'verified',
+                         'verification_date',
+                         'verified_melanoma',
+                         'skin_analysis' => [
+                             'id',
+                             'user_id',
+                             'verified',
+                             'verified_by',
+                             'catatanDokter',
+                             'verification_date',
+                         ],
+                         'doctor' => [
+                             'id',
+                             'firstName',
+                             'lastName',
+                         ],
+                     ],
+                 ]);
+
+        // Assert the order of the verifications
+        $responseData = $response->json();
+        $this->assertTrue($responseData[0]['verified'] <= $responseData[1]['verified']);
     }
 }
