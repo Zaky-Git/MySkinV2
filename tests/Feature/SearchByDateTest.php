@@ -78,29 +78,7 @@ class SearchByDateTest extends TestCase
             ->assertJson(['message' => 'Tanggal tidak ditemukan']);
     }
 
-    public function test_search_by_date_expects_200_when_no_data_found()// Test ini akan gagal karena kita mengharapkan respons 200 ketika sebenarnya data tidak ada
-    {
-        $response = $this->json('GET', 'api/skinAnalysis/searchByDate', ['date' => Carbon::today()->toDateString()]);
 
-        // Ini akan gagal karena mengharapkan status 200 padahal harusnya 404
-        $response->assertStatus(200);
-    }
-
-    public function test_search_by_date_returns_data_for_different_user()// TTest ini akan gagal karena kita mencoba mengambil data SkinAnalysis untuk user lain yang tidak sedang login,
-    {
-        $date = Carbon::today();
-        $otherUser = User::factory()->create();
-        SkinAnalysis::factory()->create([
-            'user_id' => $otherUser->id,
-            'created_at' => $date,
-        ]);
-
-        // Lakukan request searchByDate dengan tanggal yang sesuai, namun untuk user yang sedang login (bukan pemilik data)
-        $response = $this->json('GET', 'api/skinAnalysis/searchByDate', ['date' => $date->toDateString()]);
-
-        // Ini akan gagal karena mengharapkan status 200 padahal harusnya 404 (tidak ada data untuk user yang login)
-        $response->assertStatus(200);
-    }
 
 
 }
