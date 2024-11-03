@@ -21,6 +21,8 @@ Route::delete('/verification/{id}', [VerificationsController::class, 'deleteVeri
 
 # doctor
 Route::get('/doctors', [DoctorController::class, 'getAllDoctor']);
+Route::get('/doctors/search', [DoctorController::class, 'getDoctorByName']);
+
 Route::get('/doctor/{id}', [DoctorController::class, 'getDoctor']);
 Route::get('/allUserByDoctor/{id}', [UserController::class, 'getAllUserByDoctor']);
 Route::get('/doctor/{doctor_id}/patients', [DoctorController::class, 'getPatients']);

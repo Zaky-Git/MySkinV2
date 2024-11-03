@@ -4,40 +4,63 @@ import axiosClient from "../../axios-client.js";
 import { ClipLoader } from "react-spinners";
 
 const DaftarDokter = () => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([]); // Current displayed data
+    const [initialData, setInitialData] = useState([]); // Store initial data
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchDoctorsAndPatients = async () => {
-            try {
-                const response = await axiosClient.get("/doctors");
-                const doctors = response.data;
-
-                const updatedDoctors = await Promise.all(
-                    doctors.map(async (doctor) => {
-                        const patientCountResponse = await axiosClient.get(
-                            `/doctor/${doctor.id}/patients-count`
-                        );
-                        doctor.patient_count =
-                            patientCountResponse.data.patient_count;
-                        return doctor;
-                    })
-                );
-
-                setData(updatedDoctors);
-                setLoading(false);
-            } catch (error) {
-                console.error(
-                    "There was an error fetching the doctors data!",
-                    error
-                );
-                setLoading(false);
-            }
-        };
-
         fetchDoctorsAndPatients();
     }, []);
+
+    // Fetch all doctors initially
+    const fetchDoctorsAndPatients = async () => {
+        setLoading(true);
+        try {
+            const response = await axiosClient.get("/doctors");
+            const doctors = response.data;
+
+            const updatedDoctors = await Promise.all(
+                doctors.map(async (doctor) => {
+                    const patientCountResponse = await axiosClient.get(
+                        `/doctor/${doctor.id}/patients-count`
+                    );
+                    doctor.patient_count =
+                        patientCountResponse.data.patient_count;
+                    return doctor;
+                })
+            );
+
+            setData(updatedDoctors); // Set displayed data
+            setInitialData(updatedDoctors); // Store initial data for reset
+        } catch (error) {
+            console.error("Error fetching doctors data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Function to search by name
+    const searchByName = async () => {
+        setLoading(true);
+        try {
+            const response = await axiosClient.get(
+                `/doctors/search?name=${searchQuery}`
+            );
+            setData(response.data);
+        } catch (error) {
+            console.error("Error searching doctors by name:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Function to reset the search
+    const resetSearch = () => {
+        setSearchQuery("");
+        setData(initialData); // Reset to the initial data
+    };
 
     const handleDetailClick = (doctorId) => {
         navigate(`/admin/detailDokter/${doctorId}`);
@@ -50,6 +73,30 @@ const DaftarDokter = () => {
                     Dokter
                     <hr />
                 </h3>
+
+                {/* Search Input with Search and Reset Buttons */}
+                <div className="mb-4 flex">
+                    <input
+                        type="text"
+                        placeholder="Cari dokter menggunakan nama, email, nomor telfon"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="p-2 border border-gray-300 rounded w-full"
+                    />
+                    <button
+                        onClick={searchByName}
+                        className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Search
+                    </button>
+                    <button
+                        onClick={resetSearch}
+                        className="ml-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Reset
+                    </button>
+                </div>
+
                 {loading ? (
                     <div className="flex items-center justify-center">
                         <ClipLoader

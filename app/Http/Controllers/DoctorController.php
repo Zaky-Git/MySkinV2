@@ -13,6 +13,26 @@ class DoctorController extends Controller
         $doctor = Doctor::all()->sortBy('created');
         return response()->json($doctor);
     }
+    public function getDoctorByName(Request $request)
+    {
+        $name = $request->query('name');
+
+        // Check if the search query is provided
+        if (!$name) {
+            return response()->json(['error' => 'No search query provided.'], 400);
+        }
+
+        // Perform a case-insensitive search across firstName, lastName, email, and number fields
+        $doctors = Doctor::where(function ($query) use ($name) {
+            $query->where('firstName', 'LIKE', "%{$name}%")
+                ->orWhere('lastName', 'LIKE', "%{$name}%")
+                ->orWhere('email', 'LIKE', "%{$name}%")
+                ->orWhere('number', 'LIKE', "%{$name}%");
+        })->get();
+
+        // Return the result as JSON
+        return response()->json($doctors);
+    }
     public function getDoctor($id)
     {
         $doctor = Doctor::find($id);
