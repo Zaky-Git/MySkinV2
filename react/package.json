@@ -10,14 +10,21 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@date-io/date-fns": "^3.0.0",
+        "@emotion/react": "^11.13.3",
+        "@emotion/styled": "^11.13.0",
         "@fortawesome/free-solid-svg-icons": "^6.5.2",
         "@fortawesome/react-fontawesome": "^0.2.2",
         "@headlessui/react": "^2.0.4",
         "@lordicon/react": "^1.6.0",
+        "@mui/material": "^6.1.6",
+        "@mui/x-date-pickers": "^7.22.1",
         "axios": "^1.7.2",
         "bootstrap": "^5.3.3",
         "date-fns": "^3.6.0",
-        "react": "file:",
+
+        "react": "^18.2.0",
+
         "react-bootstrap": "^2.10.3",
         "react-confirm": "^0.3.0-7",
         "react-confirm-alert": "^3.0.6",
@@ -26,6 +33,7 @@
         "react-icons": "^5.2.1",
         "react-image-crop": "^11.0.5",
         "react-modal": "^3.16.1",
+        "react-paginate": "^8.2.0",
         "react-router-dom": "^6.23.0",
         "react-spinners": "^0.13.8",
         "react-toastify": "^10.0.5",
