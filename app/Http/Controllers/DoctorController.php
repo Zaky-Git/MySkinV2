@@ -122,24 +122,65 @@ class DoctorController extends Controller
         return response()->json($daftarPasien);
     }
 
-
-
-    public function getVerifiedPengajuan($doctor_id)
+    public function getVerifiedPengajuan(Request $request, $doctor_id)
     {
-        $daftarPasien = Verifications::where('verifications.doctor_id', $doctor_id)
+        $query = Verifications::where('verifications.doctor_id', $doctor_id)
             ->where('verifications.verified', 1)
-            ->join('users', 'verifications.user_id', '=', 'users.id')
-            ->join('skin_analysis', 'verifications.skin_analysis_id', '=', 'skin_analysis.id')
-            ->with(['doctor', 'skinAnalysis', 'user'])
-            ->get([
-                'verifications.id',
-                'verifications.created_at',
-                'users.firstName',
-                'users.lastName',
-                'skin_analysis.analysis_percentage',
-                'verifications.verified_melanoma',
-                'skin_analysis.catatanDokter'
-            ]);
+            ->with('doctor', 'user', 'skinAnalysis');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('firstName', 'LIKE', '%' . $search . '%')
+                    ->orWhere('lastName', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        if ($request->filled('melanoma_detected')) {
+            $query->whereHas('skinAnalysis', function ($q) use ($request) {
+                $q->where('melanoma_detected', $request->melanoma_detected);
+            });
+        }
+
+        if ($request->filled('verification_date_from') || $request->filled('verification_date_to')) {
+            $query->where(function ($q) use ($request) {
+                if ($request->filled('verification_date_from')) {
+                    $q->where('verification_date', '>=', $request->verification_date_from);
+                }
+                if ($request->filled('verification_date_to')) {
+                    $q->where('verification_date', '<=', $request->verification_date_to);
+                }
+            });
+        }
+
+        if ($request->filled('analysis_percentage_min')) {
+            $query->whereHas('skinAnalysis', function ($q) use ($request) {
+                $q->where('analysis_percentage', '>=', $request->analysis_percentage_min);
+            });
+        }
+
+        if ($request->filled('analysis_percentage_max')) {
+            $query->whereHas('skinAnalysis', function ($q) use ($request) {
+                $q->where('analysis_percentage', '<=', $request->analysis_percentage_max);
+            });
+        }
+
+
+        $sortField = $request->get('sort_field', 'verifications.created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        if (str_contains($sortField, 'user.')) {
+            $sortField = str_replace('user.', 'users.', $sortField);
+            $query->join('users', 'verifications.user_id', '=', 'users.id');
+        } elseif (str_contains($sortField, 'skinAnalysis.')) {
+            $sortField = str_replace('skinAnalysis.', 'skin_analysis.', $sortField);
+            $query->join('skin_analysis', 'verifications.skin_analysis_id', '=', 'skin_analysis.id');
+        }
+
+        $query->orderBy($sortField, $sortOrder);
+
+        $perPage = $request->get('per_page', 10);
+        $daftarPasien = $query->paginate($perPage);
 
         return response()->json($daftarPasien);
     }

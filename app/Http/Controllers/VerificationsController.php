@@ -8,10 +8,29 @@ use Illuminate\Http\Request;
 
 class VerificationsController extends Controller
 {
-    public function getPasienVerificationListByID($id)
+    // public function getPasienVerificationListByID($id)
+    // {
+    //     $verifications = Verifications::where('user_id', $id)
+    //         ->with(['skinAnalysis', 'doctor'])
+    //         ->get();
+
+    //     return response()->json($verifications);
+    // }
+
+    public function getPasienVerificationListByID(Request $request, $id)
     {
+        $sortKey = $request->query('sortKey', 'created_at');
+        $searchTerm = $request->query('searchTerm', '');
+
         $verifications = Verifications::where('user_id', $id)
             ->with(['skinAnalysis', 'doctor'])
+            ->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereHas('doctor', function ($query) use ($searchTerm) {
+                    $query->where('firstName', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('lastName', 'like', '%' . $searchTerm . '%');
+                });
+            })
+            ->orderBy($sortKey, $sortKey === 'created_at' ? 'desc' : 'asc')
             ->get();
 
         return response()->json($verifications);
