@@ -29,6 +29,7 @@ Route::get('/doctor/{doctor_id}/countUserVer', [DoctorController::class, 'countV
 Route::get('/countDoctor', [DoctorController::class, 'countDoctor']);
 Route::get('/ajuanVerifikasi/{doctor_id}', [DoctorController::class, 'getPasienByDoctor']);
 Route::get('/listPasien/{doctor_id}', [UserController::class, 'getUserByDoctor']);
+Route::get('/doctorsCommentCounts', [DoctorController::class, 'countDoctorComments']);
 Route::get('/riwayatVerified/{doctor_id}', [DoctorController::class, 'getVerifiedPengajuan']);
 
 # user
