@@ -17,7 +17,7 @@ class VerificationsFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            // 'user_id' => User::factory(),
             'doctor_id' => Doctor::factory(),
             'skin_analysis_id' => SkinAnalysis::factory(),
             'verified' => $this->faker->boolean,
