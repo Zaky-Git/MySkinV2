@@ -16,6 +16,8 @@ Route::get('/pasienVerificationList/{id}', [VerificationsController::class, 'get
 Route::get('/pengajuanUmum', [VerificationsController::class, 'getPengajuanUmum']);
 Route::get('/verification/{id}', [VerificationsController::class, 'getVerificationBySkinAnalysisID']);
 Route::post('/verifikasiSkin/{id}', [VerificationsController::class, 'verifikasi']);
+Route::put('/updateVerification/{id}', [VerificationsController::class, 'updateVerification']);
+Route::delete('/verification/{id}', [VerificationsController::class, 'deleteVerificationBySkinAnalysisId']);
 
 # doctor
 Route::get('/doctors', [DoctorController::class, 'getAllDoctor']);
@@ -50,9 +52,10 @@ Route::post('/registerUser', [AuthController::class, 'mendaftarkanUser']);
 #skinAnalysis
 Route::post('/skinAnalysis', [SkinAnalysisController::class, 'skinAnalysis']);
 Route::post('/mengajukanVerifikasi/{id}', [SkinAnalysisController::class, 'mengajukanVerifikasi']);
-
 Route::get('/mySkinAnalysis/{id}', [SkinAnalysisController::class, 'getMySkinAnalysis']);
 Route::get('/getSkinAnalysis/{id}', [SkinAnalysisController::class, 'getSkinAnalysisById']);
+Route::delete('/skinAnalysis/{id}', [SkinAnalysisController::class, 'deleteSkinAnalysisById']);
+Route::put('/updateKeluhanSkinAnalysis/{id}', [SkinAnalysisController::class, 'updateKeluhanById']);
 
 
 #doctor

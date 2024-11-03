@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 
 <head>
-    @vite(['resources/js/app.js'])
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Application</title>
 </head>
 
 <body>
-    <div id="app"></div>
+    <h1>Welcome to My Application!</h1>
+    <p>This is the new home page.</p>
 </body>
 
 </html>
