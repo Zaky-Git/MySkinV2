@@ -17,31 +17,30 @@ class SearchByDateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Buat user dan login untuk menjalankan pengujian
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
     }
 
-    public function test_search_by_date_returns_results()// kita memastikan bahwa ketika ada data SkinAnalysis yang dibuat pada tanggal tertentu untuk user yang sedang login dengan mengembalikan 200
+    public function test_search_by_date_returns_results()// ketika ada data SkinAnalysis yang dibuat pada tanggal tertentu untuk user yang sedang login dengan mengembalikan 200
     {
-        // Buat data SkinAnalysis untuk user yang sedang login pada tanggal tertentu
+
         $date = Carbon::today();
         SkinAnalysis::factory()->create([
             'user_id' => $this->user->id,
             'created_at' => $date,
         ]);
 
-        // Lakukan request searchByDate dengan parameter tanggal yang sesuai
+        // searchByDate dengan parameter tanggal yang sesuai
         $response = $this->json('GET', 'api/skinAnalysis/searchByDate', ['date' => $date->toDateString()]);
 
-        // Pastikan response berstatus 200 dan data ditemukan
+        // berstatus 200 dan data ditemukan
         $response->assertStatus(200)
             ->assertJsonStructure([
                 '*' => ['id', 'user_id', 'created_at', 'image_path', 'analysis_percentage', 'keluhan']
             ]);
     }
 
-    public function test_search_by_date_returns_results_only_for_logged_in_user() // Test ini memastikan bahwa hanya data SkinAnalysis yang dibuat oleh user yang sedang login yang akan dikembalikan, meskipun ada data lain dengan tanggal yang sama untuk user yang berbeda.
+    public function test_search_by_date_returns_results_only_for_logged_in_user() // hanya data SkinAnalysis yang dibuat oleh user yang sedang login yang akan dikembalikan, meskipun ada data lain dengan tanggal yang sama untuk user yang berbeda.
     {
         $date = Carbon::today();
         SkinAnalysis::factory()->create([
@@ -54,16 +53,16 @@ class SearchByDateTest extends TestCase
             'created_at' => $date,
         ]);
 
-        // Lakukan request searchByDate dengan parameter tanggal yang sesuai
+        // searchByDate dengan parameter tanggal yang sesuai
         $response = $this->json('GET', 'api/skinAnalysis/searchByDate', ['date' => $date->toDateString()]);
-        // Pastikan response berstatus 200 dan hanya mengembalikan data untuk user yang login
+        // response berstatus 200 dan hanya mengembalikan data untuk user yang login
         $response->assertStatus(200)
             ->assertJsonCount(1) // Hanya satu hasil untuk user yang sedang login
             ->assertJsonStructure([
                 '*' => ['id', 'user_id', 'created_at', 'image_path', 'analysis_percentage', 'keluhan']
             ]);
 
-        // Pastikan bahwa hasil yang dikembalikan hanya untuk user yang login
+        // hasil yang dikembalikan hanya untuk user yang login
         $response->assertJsonFragment(['user_id' => $this->user->id]);
     }
 
