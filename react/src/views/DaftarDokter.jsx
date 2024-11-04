@@ -5,6 +5,7 @@ import { ClipLoader } from "react-spinners";
 
 const DaftarDokter = () => {
     const [data, setData] = useState([]);
+    const [doctorComments, setDoctorComments  ] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -13,6 +14,11 @@ const DaftarDokter = () => {
             try {
                 const response = await axiosClient.get("/doctors");
                 const doctors = response.data;
+
+                const response2 = await axiosClient.get("/doctorsCommentCounts");
+                const doctorCommentsData = response2.data;
+
+                setDoctorComments(doctorCommentsData);
 
                 const updatedDoctors = await Promise.all(
                     doctors.map(async (doctor) => {
@@ -68,10 +74,11 @@ const DaftarDokter = () => {
                                 <th className="col-2">Email</th>
                                 <th className="col-2">Nomor Telepon</th>
                                 <th className="col-2">Jumlah Pasien</th>
+                                <th className="col-2">Jumlah Komentar</th>
                                 <th className="col-2"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                    <tbody>
                             {data.map((item, index) => (
                                 <tr key={index}>
                                     <td>
@@ -85,6 +92,7 @@ const DaftarDokter = () => {
                                     <td>{item.email}</td>
                                     <td>{item.number}</td>
                                     <td>{item.patient_count}</td>
+                                    <td>{doctorComments[index].comment_count}</td>
                                     <td>
                                         <button
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

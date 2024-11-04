@@ -19,12 +19,6 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Doctor::factory(10)->create()->each(function ($doctor) {
-            DoctorComments::factory(5)->create([
-                'doctor_id' => $doctor->id,
-            ]);
-        });
-
         // User::create([
         //     'firstName' => 'Zaky',
         //     'lastName' => 'Pasien',

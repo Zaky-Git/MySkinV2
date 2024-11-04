@@ -19,8 +19,9 @@ class DoctorCommentsFactory extends Factory
     public function definition(): array
     {
         return [
-            'skin_analysis_id' => SkinAnalysis::factory(), 
-            'doctor_id' => Doctor::factory(),
+            'skin_analysis_id' => 5,
+            'doctor_id' => Doctor::query()->inRandomOrder()->value('id') 
+            ?? Doctor::factory(),
             'comment' => $this->faker->sentence(10),
         ];
     }
